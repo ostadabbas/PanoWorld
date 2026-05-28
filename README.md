@@ -307,6 +307,7 @@ PanoWorld builds on top of several open-source projects. We thank the authors an
 - [Depth Anything V2](https://github.com/DepthAnything/Depth-Anything-V2) + our equirectangular adaptation (DAP) — depth backbone used to supervise the geometry head.
 - [CoTracker3](https://github.com/facebookresearch/co-tracker) — point trajectory supervision.
 - [SigLIP2](https://huggingface.co/google/siglip2-so400m-patch14-384) — perspective image conditioning encoder.
+- [Argus (Beyond the Frame, ICCV 2025)](https://github.com/Red-Fairy/argus-code) — we drew inspiration from their perspective-to-360° generation framework and data-curation ideas.
 
 See [ATTRIBUTIONS.md](ATTRIBUTIONS.md) for the full third-party software list.
 
