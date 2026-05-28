@@ -1,0 +1,7 @@
+# PanoWorld .gitattributes
+# LFS rules from upstream Cosmos-Predict2.5 have been removed so the repo
+# can be pushed/cloned without git-lfs. If you want LFS later, restore the
+# rules below and run `git lfs install && git lfs migrate import --include="..."`.
+
+*.lock linguist-generated=true
+tests/data/** linguist-generated=true

@@ -1,0 +1,109 @@
+paths:
+  master_csv: $PANO_DATA_ROOT/test/master.csv
+  strata_csv: test_set_pkg/eval/strata/strata.csv
+  results_dir: $HOME/Le/eval_results_combined
+  output_csv: $HOME/Le/eval_results_combined/results_long.csv
+eval_grid:
+  target_fps: 16
+  target_secs: 5.0
+  target_frames: 80
+metrics:
+  visual: true
+  depth: true
+  tracks: true
+  trajectory: false
+  long_horizon: false
+  caption_alignment: false
+trajectory:
+  windows:
+  - - 5
+    - 10
+  - - 20
+    - 25
+  - - 50
+    - 55
+  - - 80
+    - 85
+methods:
+- id: panoworld_pers
+  input_kind: pers_image_plus_caption
+  stage: 1
+  inference: round1_then_round2
+  notes: ours (full geo loss, stage-2 iter 2000); paper main-table entry
+- id: panoworld_pers_iter2000
+  input_kind: pers_image_plus_caption
+  stage: 1
+  inference: round1_then_round2
+  notes: alias of panoworld_pers under explicit checkpoint name; kept for traceability
+- id: panoworld_erp
+  input_kind: erp_image_plus_caption
+  stage: 2
+  inference: round2_only
+  notes: ours (full geo loss); skip Round 1, feed real ERP first frame directly into
+    Round 2
+- id: panoworld_depth_only_iter1001
+  input_kind: pers_image_plus_caption
+  stage: 1
+  inference: round1_then_round2
+  notes: 'ablation: depth-only geo loss (lambda_track=0); checkpoint iter 1001'
+- id: panoworld_track_only_iter1001
+  input_kind: pers_image_plus_caption
+  stage: 1
+  inference: round1_then_round2
+  notes: 'ablation: track-only geo loss (lambda_depth=0); checkpoint iter 1001'
+- id: panoworld_no_geo_loss
+  input_kind: pers_image_plus_caption
+  stage: 1
+  inference: round1_then_round2
+  notes: 'ablation: no geometry loss at all (lambda_depth=lambda_track=0)'
+- id: dvd_360
+  input_kind: erp_image_plus_caption
+  stage: 1
+  notes: 360DVD; spherical motion code defaults to canonical pattern
+- id: imagine360
+  input_kind: pers_image_plus_caption
+  aux_input: static_repeat_video
+  stage: 1
+  notes: Imagine360; needs perspective video, we replicate the single image (parity)
+- id: argus
+  input_kind: pers_image_plus_caption
+  aux_input: static_repeat_video
+  stage: 1
+  notes: ARGUS; needs perspective video, same static-repeat strategy as Imagine360
+- id: follow_your_canvas_merged
+  input_kind: pers_image_plus_caption
+  aux_input: static_repeat_video
+  stage: 1
+  notes: 'FYC: per-clip pick of full-steps if available, else fast preview; covers
+    all 150 clips'
+- id: follow_your_canvas
+  input_kind: pers_image_plus_caption
+  aux_input: static_repeat_video
+  stage: 1
+  notes: FYC fast preview, all 150 clips (kept for steps-vs-quality sweep)
+- id: follow_your_canvas_full_steps
+  input_kind: pers_image_plus_caption
+  aux_input: static_repeat_video
+  stage: 1
+  notes: FYC full denoising steps, 130 clips only (kept for steps-vs-quality sweep)
+- id: omniroam_pers
+  input_kind: pers_image_plus_caption
+  stage: 1
+  aux_input: fixed_forward_traj
+  notes: OmniRoam Preview, perspective-padded ERP + fixed forward traj
+- id: omniroam_erp_merged
+  input_kind: erp_image_plus_caption
+  stage: 2
+  aux_input: fixed_forward_traj
+  notes: 'OmniRoam: per-clip pick of full Preview+Refine if available, else Preview
+    only; covers all 150 clips'
+- id: omniroam_erp
+  input_kind: erp_image_plus_caption
+  stage: 2
+  aux_input: fixed_forward_traj
+  notes: OmniRoam Preview only (no Refine), all 150 clips
+- id: omniroam_erp_full_steps
+  input_kind: erp_image_plus_caption
+  stage: 2
+  aux_input: fixed_forward_traj
+  notes: OmniRoam Preview+Refine 8-segment pipeline, 130 clips only
